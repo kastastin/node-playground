@@ -4,21 +4,23 @@
       <div class="maincontent">
         <h1>Send us feedback</h1>
 
-        <% if (locals.errors) { %>
-          <div class="alert alert-danger">
-            <ul>
-              <% errors.forEach(function(error) { %>
-                <li>
-                  <%= error.msg %>
-                </li>
-              <% }) %>
-            </ul>
-          </div>
-        <% } else if (locals.successMessage) { %>
-          <div class="alert alert-success">
-            <p><%= successMessage %></p>
-          </div>
-        <% } %>
+        <div class="feedback-status">
+          <% if (locals.errors) { %>
+            <div class="alert alert-danger">
+              <ul>
+                <% errors.forEach(function(error) { %>
+                  <li>
+                    <%= error.msg %>
+                  </li>
+                <% }) %>
+              </ul>
+            </div>
+          <% } else if (locals.successMessage) { %>
+            <div class="alert alert-success">
+              <p><%= successMessage %></p>
+            </div>
+          <% } %>
+        </div>
         
         <form class="feedback-form" method="post" action="/feedback">
           <div class="form-group">
