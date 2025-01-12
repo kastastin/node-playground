@@ -1,4 +1,5 @@
 const fs = require("fs");
+const url = require("url");
 const http = require("http");
 
 const products = fs.readFileSync(`${__dirname}/dev-data/data.json`, "utf-8");
@@ -35,23 +36,25 @@ function replaceTemplate(template, product) {
 }
 
 const server = http.createServer((req, res) => {
-  const pathname = req.url;
+  const { query, pathname } = url.parse(req.url, true);
 
   // <-- Overview page -->
   if (pathname === "/" || pathname === "/overview") {
-    res.writeHead(200, { "Content-type": "text/html" });
-
     const cardsHTML = productsObj
       .map((el) => replaceTemplate(templateCard, el))
       .join("");
-
     const output = templateOverview.replace("{%PRODUCT_CARDS%}", cardsHTML);
 
+    res.writeHead(200, { "Content-type": "text/html" });
     res.end(output);
 
     // <-- Product page -->
   } else if (pathname === "/product") {
-    res.end("This is the PRODUCT");
+    const product = productsObj[query.id];
+    const output = replaceTemplate(templateProduct, product);
+
+    res.writeHead(200, { "Content-type": "text/html" });
+    res.end(output);
 
     // <-- API -->
   } else if (pathname === "/api") {
