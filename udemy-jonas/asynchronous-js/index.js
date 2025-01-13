@@ -19,16 +19,20 @@ function writeFilePromise(file, data) {
   });
 }
 
-readFilePromise(`${__dirname}/dog1.txt`)
-  .then((res) => {
-    console.log(`Breed: ${res}`);
-    return superagent.get(`https://dog.ceo/api/breed/${res}/images/random`);
-  })
-  .then((res) => {
+async function getDogPic() {
+  try {
+    const data = await readFilePromise(`${__dirname}/dog.txt`);
+    console.log(`Breed: ${data}`);
+
+    const res = await superagent.get(
+      `https://dog.ceo/api/breed/${data}/images/random`,
+    );
     console.log(res.body.message);
-    return writeFilePromise("dog-img.txt", res.body.message);
-  })
-  .then(() => console.log("Image saved to file!"))
-  .catch((err) => {
+
+    await writeFilePromise("dog-img.txt", res.body.message);
+    console.log("Image saved to file!");
+  } catch (err) {
     console.log(err);
-  });
+  }
+}
+getDogPic();
