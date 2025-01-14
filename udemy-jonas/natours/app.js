@@ -19,6 +19,23 @@ app.get("/api/v1/tours", (req, res) => {
   });
 });
 
+// <-- GET tour by id -->
+app.get("/api/v1/tours/:id", (req, res) => {
+  const tour = tours.find((t) => t.id === Number(req.params.id));
+
+  if (!tour) {
+    return res.status(404).json({
+      status: "fail",
+      message: "ID not found",
+    });
+  }
+
+  res.status(200).json({
+    status: "success",
+    data: { tour },
+  });
+});
+
 // <-- POST tours -->
 app.post("/api/v1/tours", (req, res) => {
   const newId = tours.at(-1).id + 1;
