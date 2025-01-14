@@ -1,16 +1,18 @@
+const fs = require("fs");
 const express = require("express");
+
+const tours = JSON.parse(
+  fs.readFileSync(`${__dirname}/dev-data/data/tours-simple.json`),
+);
 
 const app = express();
 
-app.get("/", (req, res) => {
+app.get("/api/v1/tours", (req, res) => {
   res.status(200).json({
-    app: "Natours",
-    message: "Hello from the server side!",
+    status: "success",
+    results: tours.length,
+    data: { tours },
   });
-});
-
-app.post("/", (req, res) => {
-  res.send("You can post to this endpoint...");
 });
 
 app.listen(3000, () => {
