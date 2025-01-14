@@ -10,17 +10,15 @@ const app = express();
 // <-- MIDDLEWARE -->
 app.use(express.json());
 
-// <-- GET tours -->
-app.get("/api/v1/tours", (req, res) => {
+function getAllTours(req, res) {
   res.status(200).json({
     status: "success",
     results: tours.length,
     data: { tours },
   });
-});
+}
 
-// <-- GET tour by id -->
-app.get("/api/v1/tours/:id", (req, res) => {
+function getTour(req, res) {
   const tour = tours.find((t) => t.id === Number(req.params.id));
 
   if (!tour) {
@@ -34,10 +32,9 @@ app.get("/api/v1/tours/:id", (req, res) => {
     status: "success",
     data: { tour },
   });
-});
+}
 
-// <-- POST tours -->
-app.post("/api/v1/tours", (req, res) => {
+function createTour(req, res) {
   const newId = tours.at(-1).id + 1;
   const newTour = { id: newId, ...req.body };
 
@@ -53,7 +50,51 @@ app.post("/api/v1/tours", (req, res) => {
       });
     },
   );
-});
+}
+
+function updateTour(req, res) {
+  const tour = tours.find((t) => t.id === Number(req.params.id));
+
+  if (!tour) {
+    return res.status(404).json({
+      status: "fail",
+      message: "ID not found",
+    });
+  }
+
+  res.status(200).json({
+    status: "success",
+    data: { tour: "<Updated tour>" },
+  });
+}
+
+function deleteTour(req, res) {
+  const tour = tours.find((t) => t.id === Number(req.params.id));
+
+  if (!tour) {
+    return res.status(404).json({
+      status: "fail",
+      message: "ID not found",
+    });
+  }
+
+  res.status(204).json({
+    status: "success",
+    data: null,
+  });
+}
+
+// prettier-ignore
+app
+  .route("/api/v1/tours")
+  .get(getAllTours)
+  .post(createTour);
+
+app
+  .route("/api/v1/tours/:id")
+  .get(getTour)
+  .patch(updateTour)
+  .delete(deleteTour);
 
 app.listen(3000, () => {
   console.log("App running on port 3000...");
