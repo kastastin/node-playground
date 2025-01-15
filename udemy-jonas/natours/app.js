@@ -98,6 +98,41 @@ function deleteTour(req, res) {
   });
 }
 
+function getAllUsers(req, res) {
+  res.status(500).json({
+    status: "error",
+    message: "This route has not defined yet",
+  });
+}
+
+function getUser(req, res) {
+  res.status(500).json({
+    status: "error",
+    message: "This route has not defined yet",
+  });
+}
+
+function createUser(req, res) {
+  res.status(500).json({
+    status: "error",
+    message: "This route has not defined yet",
+  });
+}
+
+function updateUser(req, res) {
+  res.status(500).json({
+    status: "error",
+    message: "This route has not defined yet",
+  });
+}
+
+function deleteUser(req, res) {
+  res.status(500).json({
+    status: "error",
+    message: "This route has not defined yet",
+  });
+}
+
 // <-- ROUTES -->
 app.route("/api/v1/tours").get(getAllTours).post(createTour);
 
@@ -106,6 +141,14 @@ app
   .get(getTour)
   .patch(updateTour)
   .delete(deleteTour);
+
+app.route("/api/v1/users").get(getAllUsers).post(createUser);
+
+app
+  .route("/api/v1/users/:id")
+  .get(getUser)
+  .patch(updateUser)
+  .delete(deleteUser);
 
 app.listen(3000, () => {
   console.log("App running on port 3000...");
