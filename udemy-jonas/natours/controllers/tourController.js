@@ -66,6 +66,18 @@ function checkId(req, res, next, value) {
   next();
 }
 
+function checkBody(req, res, next) {
+  console.log(!req.body.name, req.body.name);
+  if (!req.body.name || !req.body.price) {
+    return res.status(400).json({
+      status: "fail",
+      message: "Name or price is missing",
+    });
+  }
+
+  next();
+}
+
 module.exports = {
   getAllTours,
   getTour,
@@ -73,4 +85,5 @@ module.exports = {
   updateTour,
   deleteTour,
   checkId,
+  checkBody,
 };
