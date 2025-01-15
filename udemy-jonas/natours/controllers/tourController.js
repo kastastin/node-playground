@@ -1,0 +1,87 @@
+const fs = require("fs");
+
+const tours = JSON.parse(
+  fs.readFileSync(`${__dirname}/../dev-data/data/tours-simple.json`),
+);
+
+function getAllTours(req, res) {
+  res.status(200).json({
+    status: "success",
+    results: tours.length,
+    data: { tours },
+  });
+}
+
+function getTour(req, res) {
+  const tour = tours.find((t) => t.id === Number(req.params.id));
+
+  if (!tour) {
+    return res.status(404).json({
+      status: "fail",
+      message: "ID not found",
+    });
+  }
+
+  res.status(200).json({
+    status: "success",
+    data: { tour },
+  });
+}
+
+function createTour(req, res) {
+  const newId = tours.at(-1).id + 1;
+  const newTour = { id: newId, ...req.body };
+
+  tours.push(newTour);
+
+  fs.writeFile(
+    `${__dirname}/dev-data/data/tours-simple.json`,
+    JSON.stringify(tours),
+    (err) => {
+      res.status(201).json({
+        status: "success",
+        data: { tour: newTour },
+      });
+    },
+  );
+}
+
+function updateTour(req, res) {
+  const tour = tours.find((t) => t.id === Number(req.params.id));
+
+  if (!tour) {
+    return res.status(404).json({
+      status: "fail",
+      message: "ID not found",
+    });
+  }
+
+  res.status(200).json({
+    status: "success",
+    data: { tour: "<Updated tour>" },
+  });
+}
+
+function deleteTour(req, res) {
+  const tour = tours.find((t) => t.id === Number(req.params.id));
+
+  if (!tour) {
+    return res.status(404).json({
+      status: "fail",
+      message: "ID not found",
+    });
+  }
+
+  res.status(204).json({
+    status: "success",
+    data: null,
+  });
+}
+
+module.exports = {
+  getAllTours,
+  getTour,
+  createTour,
+  updateTour,
+  deleteTour,
+};
